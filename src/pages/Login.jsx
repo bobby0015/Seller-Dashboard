@@ -10,6 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { login } from "@/http/api";
+import useTokenStore from "@/store";
 import { handleError, handleSuccess } from "@/utils/messageHandler";
 import { useMutation } from "@tanstack/react-query";
 import { LoaderCircle } from "lucide-react";
@@ -21,12 +22,15 @@ const Login = () => {
   const navigate = useNavigate();
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
+  //to set toke to the redux zustand
+  const setToken = useTokenStore((state)=>state.setToken)
 
   // Mutations
   const mutation = useMutation({
     mutationFn: login,
     onSuccess: (response) => {
       handleSuccess(response.data.message);
+      setToken(response.data.seller_token);
       setTimeout(() => {
         navigate("/");
       }, 3000);
