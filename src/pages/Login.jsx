@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { login } from "@/http/api";
 import { handleError, handleSuccess } from "@/utils/messageHandler";
 import { useMutation } from "@tanstack/react-query";
+import { LoaderCircle } from "lucide-react";
 import { useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -28,7 +29,7 @@ const Login = () => {
       handleSuccess(response.data.message);
       setTimeout(() => {
         navigate("/");
-      },3000)
+      }, 3000);
     },
     onError: (error) => {
       const errorMessage =
@@ -40,7 +41,7 @@ const Login = () => {
   const handleLoginSubmit = () => {
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
-    if(!email || !password){
+    if (!email || !password) {
       handleError("Please enter a valid email and password");
       return;
     }
@@ -75,8 +76,13 @@ const Login = () => {
         </CardContent>
         <CardFooter>
           <div className="w-full">
-            <Button onClick={handleLoginSubmit} className={`w-full`}>
-              <span className="ml-2">Sign in</span>
+            <Button
+              onClick={handleLoginSubmit}
+              className={`w-full`}
+              disabled={mutation.isPending}
+            >
+              {mutation.isPending && <LoaderCircle className="animate-spin" />}
+              <span>Sign in</span>
             </Button>
 
             <div className="mt-4 text-center text-sm">
@@ -88,7 +94,7 @@ const Login = () => {
           </div>
         </CardFooter>
       </Card>
-      <ToastContainer/>
+      <ToastContainer />
     </section>
   );
 };
