@@ -9,18 +9,44 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { login } from "@/http/api";
+import { handleError, handleSuccess } from "@/utils/messageHandler";
+import { useMutation } from "@tanstack/react-query";
 import { useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 const Login = () => {
+  const navigate = useNavigate();
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
-  const handleLoginSubmit = () =>{
+  // Mutations
+  const mutation = useMutation({
+    mutationFn: login,
+    onSuccess: (response) => {
+      handleSuccess(response.data.message);
+      setTimeout(() => {
+        navigate("/");
+      },3000)
+    },
+    onError: (error) => {
+      const errorMessage =
+        error.response?.data?.message || "An unexpected error occurred";
+      handleError(errorMessage);
+    },
+  });
+
+  const handleLoginSubmit = () => {
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
-    console.log(email, password);
-  }
+    if(!email || !password){
+      handleError("Please enter a valid email and password");
+      return;
+    }
+    // make call to login
+    mutation.mutate({ email, password });
+  };
 
   return (
     <section className="flex justify-center items-center h-screen">
@@ -49,7 +75,7 @@ const Login = () => {
         </CardContent>
         <CardFooter>
           <div className="w-full">
-            <Button onClick={handleLoginSubmit} className="w-full">
+            <Button onClick={handleLoginSubmit} className={`w-full`}>
               <span className="ml-2">Sign in</span>
             </Button>
 
@@ -62,6 +88,7 @@ const Login = () => {
           </div>
         </CardFooter>
       </Card>
+      <ToastContainer/>
     </section>
   );
 };
