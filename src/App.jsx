@@ -1,11 +1,9 @@
 import React from 'react'
-import { Button } from './components/ui/button'
+import DashboardLayout from './layouts/DashboardLayout'
 
 const App = () => {
   return (
-    <div>
-      <Button>Click Me</Button>
-    </div>
+    <DashboardLayout/>
   )
 }
 
