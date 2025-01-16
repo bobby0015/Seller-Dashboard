@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { authContext } from "@/context/authContext";
 import { register } from "@/http/api";
-import { handleError } from "@/utils/messageHandler";
+import { handleError, handleSuccess } from "@/utils/messageHandler";
 import { useMutation } from "@tanstack/react-query";
 import { Store } from "lucide-react";
 import { useContext, useEffect, useRef } from "react";
@@ -51,15 +51,15 @@ const CreateShop = () => {
 
   const handleShopSubmit = () =>{
     const shopName = shopNameRef.current?.value;
-    const shopDescription = shopDescriptionRef.current?.value;
+    const shopDesc = shopDescriptionRef.current?.value;
     const shopAddress = shopAddressRef.current?.value;
 
-    if(!shopName || !shopDescription || !shopAddress){
+    if(!shopName || !shopDesc || !shopAddress){
       handleError("Insert Valid Credentials");
       return;
     }
-
-    mutation.mutate({...sellerRegisterInfo, shopName, shopDescription, shopAddress});
+    const data = {...sellerRegisterInfo, shopName, shopDesc, shopAddress};
+    mutation.mutate(data);
   }
 
   return (
