@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
 const Register = () => {
   return (
@@ -48,14 +48,21 @@ const Register = () => {
           </div>
           <div className="grid gap-2">
             <Label htmlFor="confrimPassword">Confirm Password</Label>
-            <Input id="confirmPassword" type="text" placeholder="Retype Password" required />
+            <Input
+              id="confirmPassword"
+              type="text"
+              placeholder="Retype Password"
+              required
+            />
           </div>
         </CardContent>
         <CardFooter>
           <div className="w-full">
-            <Button className="w-full">
-              <span className="ml-2">Sign in</span>
-            </Button>
+            <Link to="/register/create-a-shop">
+              <Button className="w-full">
+                <span className="ml-2">Proceed to create a shop</span>
+              </Button>
+            </Link>
 
             <div className="mt-4 text-center text-sm">
               Already have an account?{" "}
