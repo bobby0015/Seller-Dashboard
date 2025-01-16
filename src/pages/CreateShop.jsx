@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { authContext } from "@/context/authContext";
 import { register } from "@/http/api";
+import useTokenStore from "@/store";
 import { handleError, handleSuccess } from "@/utils/messageHandler";
 import { useMutation } from "@tanstack/react-query";
 import { Store } from "lucide-react";
@@ -25,6 +26,7 @@ const CreateShop = () => {
   const shopNameRef = useRef(null);
   const shopDescriptionRef = useRef(null);
   const shopAddressRef = useRef(null);
+  const setToken = useTokenStore((state)=>state.setToken)
 
   useEffect(()=>{
     if(!sellerRegisterInfo){
@@ -36,6 +38,7 @@ const CreateShop = () => {
   const mutation = useMutation({
     mutationFn: register,
     onSuccess: (response) => {
+      setToken(response.data.seller_token);
       handleSuccess(response.data.message);
       setTimeout(() => {
         navigate("/");
