@@ -1,11 +1,16 @@
 import { create } from "zustand";
-import { devtools } from "zustand/middleware";
+import { devtools, persist } from "zustand/middleware";
 
 const useTokenStore = create(
-  devtools((set) => ({
-    token: "",
-    setToken: (data) => set(() => ({ token: data })),
-  }))
+  devtools(
+    persist(
+      (set) => ({
+        token: "",
+        setToken: (data) => set(() => ({ token: data })),
+      }),
+      { name: "seller-token-store" }
+    )
+  )
 );
 
 export default useTokenStore;
