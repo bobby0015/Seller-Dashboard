@@ -11,13 +11,57 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { authContext } from "@/context/authContext";
+import { register } from "@/http/api";
+import { handleError } from "@/utils/messageHandler";
+import { useMutation } from "@tanstack/react-query";
 import { Store } from "lucide-react";
-import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 const CreateShop = () => {
-  const {sellerRegisterInfo} = useContext(authContext)
-  
+  const navigate = useNavigate();
+  const { sellerRegisterInfo } = useContext(authContext);
+  const shopNameRef = useRef(null);
+  const shopDescriptionRef = useRef(null);
+  const shopAddressRef = useRef(null);
+
+  useEffect(()=>{
+    if(!sellerRegisterInfo){
+      navigate("/register")
+      return
+    }
+  },[sellerRegisterInfo])
+
+  const mutation = useMutation({
+    mutationFn: register,
+    onSuccess: (response) => {
+      handleSuccess(response.data.message);
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
+    },
+    onError: (error) => {
+      console.log(error)
+      const errorMessage =
+        error.response?.data?.message || "An unexpected error occurred";
+      handleError(errorMessage);
+    },
+  });
+
+  const handleShopSubmit = () =>{
+    const shopName = shopNameRef.current?.value;
+    const shopDescription = shopDescriptionRef.current?.value;
+    const shopAddress = shopAddressRef.current?.value;
+
+    if(!shopName || !shopDescription || !shopAddress){
+      handleError("Insert Valid Credentials");
+      return;
+    }
+
+    mutation.mutate({...sellerRegisterInfo, shopName, shopDescription, shopAddress});
+  }
+
   return (
     <section className="flex justify-center items-center h-screen">
       <Card className="w-full max-w-sm">
@@ -31,6 +75,7 @@ const CreateShop = () => {
           <div className="grid gap-2">
             <Label htmlFor="shopName">Shop name</Label>
             <Input
+              ref={shopNameRef}
               id="shopName"
               type="text"
               placeholder="John traders"
@@ -39,7 +84,11 @@ const CreateShop = () => {
           </div>
           <div className="grid w-full gap-1.5">
             <Label htmlFor="message-2">Shop Description</Label>
-            <Textarea placeholder="Tell more about your shop." id="message-2" />
+            <Textarea
+              ref={shopDescriptionRef}
+              placeholder="Tell more about your shop."
+              id="message-2"
+            />
             <p className="text-xs text-muted-foreground">
               Create a short description of your shop for the customers.
             </p>
@@ -47,6 +96,7 @@ const CreateShop = () => {
           <div className="grid gap-2">
             <Label htmlFor="shopAddress">Shop address</Label>
             <Input
+              ref={shopAddressRef}
               id="shopAddress"
               type="text"
               placeholder="Washington , CA"
@@ -56,7 +106,7 @@ const CreateShop = () => {
         </CardContent>
         <CardFooter>
           <div className="w-full">
-            <Button className="w-full">
+            <Button onClick={handleShopSubmit} className="w-full">
               <Store />
               <span className="ml-2">Build your Shop</span>
             </Button>
@@ -70,6 +120,7 @@ const CreateShop = () => {
           </div>
         </CardFooter>
       </Card>
+      <ToastContainer/>
     </section>
   );
 };
