@@ -10,10 +10,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { authContext } from "@/context/authContext";
 import { Store } from "lucide-react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 
 const CreateShop = () => {
+  const {sellerRegisterInfo} = useContext(authContext)
+  
   return (
     <section className="flex justify-center items-center h-screen">
       <Card className="w-full max-w-sm">

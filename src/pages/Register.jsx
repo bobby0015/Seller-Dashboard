@@ -9,34 +9,43 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { authContext } from "@/context/authContext";
 import { handleError, handleSuccess } from "@/utils/messageHandler";
-import React, { useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 const Register = () => {
-  const firstNameRef = useRef(null)
-  const lastNameRef = useRef(null)
-  const emailRef = useRef(null)
-  const passwordRef = useRef(null)
-  const confirmPasswordRef = useRef(null)
+  const navigate = useNavigate();
+  const firstNameRef = useRef(null);
+  const lastNameRef = useRef(null);
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+  const confirmPasswordRef = useRef(null);
+  const { setSellerRegisterInfo } = useContext(authContext);
 
-  const handleRegisterSubmit = () =>{
+  const handleRegisterSubmit = () => {
     const firstName = firstNameRef.current?.value;
     const lastName = lastNameRef.current?.value;
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
     const confirmPassword = confirmPasswordRef.current?.value;
 
-    if(!firstName || !lastName || !email || !password || !confirmPassword){
+    if (!firstName || !lastName || !email || !password || !confirmPassword) {
       handleError("Please enter valid credentials");
-      return
-    }else if(password != confirmPassword){
+      return;
+    } else if (password != confirmPassword) {
       handleError("Passwords do not match");
-      return
+      return;
+    } else {
+      const data = { firstName, lastName, email, password };
+      setSellerRegisterInfo(data);
+      handleSuccess("Successfully registered");
+      setTimeout(() => {
+        navigate("/register/create-a-shop");
+      }, 2000);
     }
-    const data = {firstName,lastName,email,password};
-  }
+  };
 
   return (
     <section className="flex justify-center items-center h-screen">
@@ -51,17 +60,29 @@ const Register = () => {
           <div className="flex gap-2">
             <div className="grid gap-2">
               <Label htmlFor="firstName">First Name</Label>
-              <Input ref={firstNameRef} id="firstName" type="text" placeholder="John" required />
+              <Input
+                ref={firstNameRef}
+                id="firstName"
+                type="text"
+                placeholder="John"
+                required
+              />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="lastName">Last Name</Label>
-              <Input ref={lastNameRef} id="lastName" type="text" placeholder="Doe" required />
+              <Input
+                ref={lastNameRef}
+                id="lastName"
+                type="text"
+                placeholder="Doe"
+                required
+              />
             </div>
           </div>
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
-            ref={emailRef}
+              ref={emailRef}
               id="email"
               type="email"
               placeholder="m@example.com"
@@ -75,7 +96,7 @@ const Register = () => {
           <div className="grid gap-2">
             <Label htmlFor="confrimPassword">Confirm Password</Label>
             <Input
-            ref={confirmPasswordRef}
+              ref={confirmPasswordRef}
               id="confirmPassword"
               type="text"
               placeholder="Retype Password"
@@ -100,7 +121,7 @@ const Register = () => {
           </div>
         </CardFooter>
       </Card>
-      <ToastContainer/>
+      <ToastContainer />
     </section>
   );
 };
