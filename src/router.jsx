@@ -5,6 +5,9 @@ import DashboardLayout from "./layouts/DashboardLayout";
 import CreateShop from "./pages/CreateShop";
 import AuthLayout from "./layouts/AuthLayout";
 import Dashboard from "./pages/Dashboard";
+import AddProduct from "./pages/AddProduct";
+import Shop from "./pages/Shop";
+import Orders from "./pages/Orders";
 
 const router = createBrowserRouter([
   {
@@ -14,6 +17,18 @@ const router = createBrowserRouter([
       {
         path: "dashboard",
         element: <Dashboard />,
+      },
+      {
+        path: "create-a-product",
+        element: <AddProduct />,
+      },
+      {
+        path: "manage-shop",
+        element: <Shop />,
+      },
+      {
+        path: "shop-orders",
+        element: <Orders />,
       }
     ]
   },
