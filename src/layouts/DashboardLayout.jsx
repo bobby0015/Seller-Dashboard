@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import useTokenStore from "@/store";
 import {
   Bell,
@@ -116,8 +117,10 @@ const DashboardLayout = () => {
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+        <main className="flex flex-1 flex-col gap-4 pl-4 pt-4 lg:gap-6 lg:p-6">
+          <ScrollArea className="w-full h-[84vh]">
           <Outlet />
+          </ScrollArea>
         </main>
       </div>
     </div>
