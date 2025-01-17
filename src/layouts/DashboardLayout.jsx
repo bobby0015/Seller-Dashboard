@@ -17,7 +17,6 @@ import {
   Package2,
   Search,
 } from "lucide-react";
-import { useEffect } from "react";
 import { Link, Navigate, NavLink, Outlet } from "react-router-dom";
 
 const DashboardLayout = () => {
