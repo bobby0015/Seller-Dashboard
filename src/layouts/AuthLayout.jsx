@@ -6,7 +6,7 @@ const AuthLayout = () => {
     const token = useTokenStore((state) => state.token);
 
     if (token) {
-        return <Navigate to={'/'} replace />;
+        return <Navigate to={'/dashboard'} replace />;
     }
 
   return (

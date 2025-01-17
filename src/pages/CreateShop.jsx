@@ -38,10 +38,9 @@ const CreateShop = () => {
   const mutation = useMutation({
     mutationFn: register,
     onSuccess: (response) => {
-      setToken(response.data.seller_token);
       handleSuccess(response.data.message);
       setTimeout(() => {
-        navigate("/");
+        setToken(response.data.seller_token);
       }, 3000);
     },
     onError: (error) => {

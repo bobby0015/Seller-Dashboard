@@ -4,11 +4,18 @@ import Register from "./pages/Register";
 import DashboardLayout from "./layouts/DashboardLayout";
 import CreateShop from "./pages/CreateShop";
 import AuthLayout from "./layouts/AuthLayout";
+import Dashboard from "./pages/Dashboard";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <DashboardLayout />,
+    children: [
+      {
+        path: "dashboard",
+        element: <Dashboard />,
+      }
+    ]
   },
   {
     path:"/auth",

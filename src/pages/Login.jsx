@@ -30,9 +30,8 @@ const Login = () => {
     mutationFn: login,
     onSuccess: (response) => {
       handleSuccess(response.data.message);
-      setToken(response.data.seller_token);
       setTimeout(() => {
-        navigate("/");
+        setToken(response.data.seller_token);
       }, 3000);
     },
     onError: (error) => {
