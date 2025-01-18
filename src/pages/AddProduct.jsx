@@ -19,12 +19,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ToastContainer } from "react-toastify";
 import { handleError, handleSuccess } from "@/utils/messageHandler";
 import { useMutation } from "@tanstack/react-query";
 import { uploadImage, uploadProduct } from "@/http/api";
+import useTokenStore from "@/store";
+import { authContext } from "@/context/authContext";
+import { LoaderCircle } from "lucide-react";
 
 const categories = [
   { id: "electronics", name: "Electronics" },
@@ -79,6 +82,7 @@ const AddProduct = () => {
   const ProductStockRef = useRef(null);
   const [category, setCategory] = useState(null);
   const [subCategory, setSubCategory] = useState(null);
+  const { sellerId } = useContext(authContext);
 
   const formData = new FormData();
   formData.append("file", selectedFile);
@@ -96,10 +100,24 @@ const AddProduct = () => {
   const mutationProduct = useMutation({
     mutationFn: uploadProduct,
     onSuccess: (response) => {
-      handleSuccess(response.data.message)
+      handleSuccess(response.data.message);
+
+      // Reset the input fields using refs
+      ProductNameRef.current.value = "";
+      ProductPriceRef.current.value = "";
+      ProductDescriptionRef.current.value = "";
+      ProductBrandRef.current.value = "";
+      ProductWarrantyRef.current.value = "";
+      ProductDiscountRef.current.value = "";
+      ProductStockRef.current.value = "";
+
+      // Reset state values
+      setSubcategory([]);
+      setSelectedFile(null);
+      setCategory(null);
+      setSubCategory(null);
     },
     onError: (error) => {
-      console.log(error);
       const errorMessage =
         error.response?.data?.message || "An unexpected error occurred";
       handleError(errorMessage);
@@ -113,7 +131,6 @@ const AddProduct = () => {
         handleError("Image upload failed");
         return;
       } else {
-        const sellerId = "676ddcc501b34603c8f793e7";
         const image = response.data.image_url;
         const name = ProductNameRef.current?.value;
         const price = ProductPriceRef.current?.value;
@@ -122,16 +139,27 @@ const AddProduct = () => {
         const brand = ProductBrandRef.current?.value;
         const warranty = ProductWarrantyRef.current?.value;
         const discount = ProductDiscountRef.current?.value;
-        const productData = {sellerId,image,name,description,category,subCategory,brand,warranty,price,discount,stock};
-        try{
-          mutationProduct.mutate(productData)
-          console.log(productData)
-        }catch(err){
+        const productData = {
+          sellerId,
+          image,
+          name,
+          description,
+          category,
+          subCategory,
+          brand,
+          warranty,
+          price,
+          discount,
+          stock,
+        };
+        try {
+          mutationProduct.mutate(productData);
+        } catch (err) {
           handleError("Failed to add product");
-        }}
+        }
+      }
     },
     onError: (error) => {
-      console.log(error);
       const errorMessage =
         error.response?.data?.message || "Images upload failed";
       handleError(errorMessage);
@@ -161,8 +189,10 @@ const AddProduct = () => {
       handleError("Please fill out all the required fields");
       return;
     }
-    console.log(formData);
-    console.log(formData.get("file"));
+    if (!sellerId) {
+      handleError("Failed to add product");
+      return;
+    }
     mutation.mutate(formData);
   };
 
@@ -287,7 +317,10 @@ const AddProduct = () => {
           </div>
         </CardContent>
         <CardFooter>
-          <Button onClick={handleFormSubmit}>Add product</Button>
+          <Button onClick={handleFormSubmit} disabled={mutation.isPending}>
+            {mutation.isPending && <LoaderCircle className="animate-spin" />}
+            <span>Add product</span>
+          </Button>
         </CardFooter>
       </Card>
       <ToastContainer />
