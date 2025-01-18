@@ -25,7 +25,6 @@ import { ToastContainer } from "react-toastify";
 import { handleError, handleSuccess } from "@/utils/messageHandler";
 import { useMutation } from "@tanstack/react-query";
 import { uploadImage, uploadProduct } from "@/http/api";
-import useTokenStore from "@/store";
 import { authContext } from "@/context/authContext";
 import { LoaderCircle } from "lucide-react";
 
@@ -71,6 +70,7 @@ const subcategories = {
 };
 
 const AddProduct = () => {
+  const { sellerId } = useContext(authContext);
   const ProductNameRef = useRef(null);
   const ProductPriceRef = useRef(null);
   const ProductDescriptionRef = useRef(null);
@@ -82,7 +82,6 @@ const AddProduct = () => {
   const ProductStockRef = useRef(null);
   const [category, setCategory] = useState(null);
   const [subCategory, setSubCategory] = useState(null);
-  const { sellerId } = useContext(authContext);
 
   const formData = new FormData();
   formData.append("file", selectedFile);

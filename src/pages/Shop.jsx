@@ -1,9 +1,12 @@
-import React from 'react'
+import { authContext } from '@/context/authContext'
+import React, { useContext } from 'react'
 
 const Shop = () => {
+  const {sellerInfo } = useContext(authContext);
+  console.log(sellerInfo)
   return (
     <div>
-      Shop
+      
     </div>
   )
 }
