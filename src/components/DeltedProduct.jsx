@@ -11,7 +11,7 @@ import { Button } from "./ui/button";
 import { authContext } from "@/context/authContext";
 
 const DeltedProduct = ({ productId }) => {
-  const { setUpdateState, updateState } = useContext(authContext);
+  const { setUpdateState, updateState, sellerId } = useContext(authContext);
   const cancelRef = useRef(null);
 
   const deleteProduct = async () => {
@@ -20,7 +20,7 @@ const DeltedProduct = ({ productId }) => {
     } else {
       try {
         const response = await fetch(
-          `http://localhost:8080/seller/product/delete/${productId}`,
+          `http://localhost:8080/seller/product/delete/${sellerId}/${productId}`,
           {
             method: "delete",
             headers: {
