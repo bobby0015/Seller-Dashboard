@@ -18,16 +18,13 @@ import {
 } from "@/components/ui/card";
 import { LoaderCircle } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  AlertDialog,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import UpdateProductForm from "@/components/UpdateProductForm";
-import { ToastContainer } from "react-toastify";
+import DeltedProduct from "@/components/DeltedProduct";
 
 const Shop = () => {
   const { sellerInfo, loadingState } = useContext(authContext);
-  const {updateState} = useContext(authContext);
+  const { updateState } = useContext(authContext);
 
   // Reducer to manage products
   const reducer = (state, action) => {
@@ -58,7 +55,7 @@ const Shop = () => {
     };
 
     fetchProducts();
-  }, [sellerInfo,updateState]);
+  }, [sellerInfo, updateState]);
 
   return loadingState || !sellerInfo || !products ? (
     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -136,9 +133,14 @@ const Shop = () => {
                       </AlertDialogTrigger>
                       <UpdateProductForm productId={product._id} />
                     </AlertDialog>
-                    <button className="text-sm text-red-500 hover:underline cursor-pointer font-semibold ml-3">
-                      Delete
-                    </button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <button className="text-sm text-red-500 hover:underline cursor-pointer font-semibold ml-3">
+                          Delete
+                        </button>
+                      </AlertDialogTrigger>
+                      <DeltedProduct productId={product._id} />
+                    </AlertDialog>
                   </div>
                 </div>
               </div>
