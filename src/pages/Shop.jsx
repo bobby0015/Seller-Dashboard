@@ -18,6 +18,11 @@ import {
 } from "@/components/ui/card";
 import { LoaderCircle } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import UpdateProductForm from "@/components/UpdateProductForm";
 
 const Shop = () => {
   const { sellerInfo, loadingState } = useContext(authContext);
@@ -99,23 +104,37 @@ const Shop = () => {
               return;
             }
             return (
-              <div key={product._id} className="bg-zinc-100 mb-5 flex items-center py-2 px-3 rounded-md">
+              <div
+                key={product._id}
+                className="bg-zinc-100 mb-5 flex items-center py-2 px-3 rounded-md"
+              >
                 <Avatar className="w-24 h-24 border-4 object-top border-green-300 cursor-pointer">
-                  <AvatarImage src={product.image}/>
-                  <AvatarFallback>CN</AvatarFallback>
+                  <AvatarImage src={product.image} />
+                  <AvatarFallback>N/A</AvatarFallback>
                 </Avatar>
                 <div className="px-4">
                   <h2 className="font-semibold">{product.name}</h2>
-                  <p className="text-xs font-semibold">Stock : {product.stock} units</p>
-                  <div className="flex">
-                    <p className="text-xs font-semibold mr-2">Price: ₹ {product.price}</p>
-                    <p className="text-xs font-semibold">Discount : {product.discount}% off</p>
+                  <p className="text-xs font-semibold">
+                    Stock : {product.stock} units
+                  </p>
+                  <div className="flex my-1">
+                    <p className="text-xs font-semibold mr-2">
+                      Price: ₹ {product.price}
+                    </p>
+                    <p className="text-xs font-semibold">
+                      Discount : {product.discount}% off
+                    </p>
                   </div>
-                  <div className="mt-2">
-                    <button className="text-xs py-1 px-3 rounded bg-blue-500 text-white font-semibold ">
-                      Update
-                    </button>
-                    <button className="text-xs py-1 px-3 rounded bg-red-500 text-white font-semibold ml-3">
+                  <div className="mt-1">
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <button className="text-sm text-blue-500 hover:underline cursor-pointer font-semibold">
+                          Update
+                        </button>
+                      </AlertDialogTrigger>
+                      <UpdateProductForm productId={product._id} />
+                    </AlertDialog>
+                    <button className="text-sm text-red-500 hover:underline cursor-pointer font-semibold ml-3">
                       Delete
                     </button>
                   </div>
