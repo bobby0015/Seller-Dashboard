@@ -9,19 +9,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { authContext } from "@/context/authContext";
 import useTokenStore from "@/store";
 import {
   Bell,
   CircleUser,
   FolderKanban,
-  Home,
   LayoutDashboard,
-  List,
   Package,
   Package2,
   PackagePlus,
   Search,
 } from "lucide-react";
+import { useContext } from "react";
 import { Link, Navigate, NavLink, Outlet } from "react-router-dom";
 
 const DashboardLayout = () => {
@@ -35,13 +35,15 @@ const DashboardLayout = () => {
   if (!token) {
     return <Navigate to={"/auth/login"} replace />;
   }
-
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-            <Link to="/dashboard" className="flex items-center gap-2 font-semibold">
+            <Link
+              to="/dashboard"
+              className="flex items-center gap-2 font-semibold"
+            >
               <Package2 className="h-6 w-6" />
               <span className="">OShop</span>
             </Link>
@@ -52,7 +54,8 @@ const DashboardLayout = () => {
           </div>
           <div className="flex-1">
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-              <NavLink to="/dashboard"
+              <NavLink
+                to="/dashboard"
                 className={`flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary`}
               >
                 <LayoutDashboard className="h-4 w-4" />
@@ -60,21 +63,21 @@ const DashboardLayout = () => {
               </NavLink>
 
               <NavLink
-              to={"/create-a-product"}
+                to={"/create-a-product"}
                 className={`flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary`}
               >
                 <PackagePlus className="h-4 w-4" />
                 Add Product{" "}
               </NavLink>
               <NavLink
-              to={"/manage-shop"}
+                to={"/manage-shop"}
                 className={`flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary`}
               >
                 <FolderKanban className="h-4 w-4" />
                 Manage Shop{" "}
               </NavLink>
               <NavLink
-              to={"/shop-orders"}
+                to={"/shop-orders"}
                 className={`flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary`}
               >
                 <Package className="h-4 w-4" />
@@ -112,14 +115,16 @@ const DashboardLayout = () => {
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <Button onClick={handleLogout} variant={"link"}>Logout</Button>
+                <Button onClick={handleLogout} variant={"link"}>
+                  Logout
+                </Button>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
         <main className="flex flex-1 flex-col gap-4 pl-4 pt-4 lg:gap-6 lg:p-6">
           <ScrollArea className="w-full h-[84vh]">
-          <Outlet />
+            <Outlet />
           </ScrollArea>
         </main>
       </div>

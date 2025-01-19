@@ -1,5 +1,5 @@
 import useTokenStore from "@/store";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 
 const authContext = createContext();
 
@@ -7,6 +7,7 @@ const AuthProvider = ({ children }) => {
   const [sellerRegisterInfo, setSellerRegisterInfo] = useState(null);
   const [sellerInfo, setSellerInfo] = useState(null);
   const [sellerId, setSellerId] = useState(null);
+  const [loadingState, setLoadingState] = useState(true);
   const token = useTokenStore((state) => state.token);
 
   useEffect(() => {
@@ -15,6 +16,7 @@ const AuthProvider = ({ children }) => {
         return;
       } else {
         try {
+          setLoadingState(true);
           const response = await fetch(`http://localhost:8080/seller/token`, {
             method: "POST",
             headers: {
@@ -24,38 +26,52 @@ const AuthProvider = ({ children }) => {
           });
           const result = await response.json();
           setSellerId(result.seller_id);
+          setLoadingState(false);
         } catch (err) {
           console.error(err);
         }
       }
     };
     getIdByToken();
-  },[token]);
+  }, [token]);
 
-  useEffect(()=>{
-    const getSellerInfo = async () =>{
-      if(sellerId){
-        try{
-          const response = await fetch(`http://localhost:8080/seller/store-info/${sellerId}`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
+  useEffect(() => {
+    const getSellerInfo = async () => {
+      if (sellerId) {
+        try {
+          setLoadingState(true);
+          const response = await fetch(
+            `http://localhost:8080/seller/store-info/${sellerId}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
           const result = await response.json();
-          console.log(result)
+          console.log(result);
           setSellerInfo(result);
-        } catch(err){
+        } catch (err) {
           console.error(err);
+        } finally {
+          setLoadingState(false);
         }
       }
-    }
+    };
     getSellerInfo();
-  },[sellerId])
+  }, [sellerId]);
 
   return (
     <authContext.Provider
-      value={{ sellerRegisterInfo, setSellerRegisterInfo, sellerId ,sellerInfo}}
+      value={{
+        sellerRegisterInfo,
+        setSellerRegisterInfo,
+        sellerId,
+        sellerInfo,
+        loadingState,
+        setLoadingState,
+      }}
     >
       {children}
     </authContext.Provider>

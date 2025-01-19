@@ -8,6 +8,15 @@ import {
 } from "@/components/ui/card";
 
 import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+
+import {
   Select,
   SelectContent,
   SelectGroup,
@@ -70,7 +79,7 @@ const subcategories = {
 };
 
 const AddProduct = () => {
-  const { sellerId } = useContext(authContext);
+  const { sellerId, loadingState } = useContext(authContext);
   const ProductNameRef = useRef(null);
   const ProductPriceRef = useRef(null);
   const ProductDescriptionRef = useRef(null);
@@ -195,8 +204,25 @@ const AddProduct = () => {
     mutation.mutate(formData);
   };
 
-  return (
+  return loadingState ? (
+    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+      <div className="animate-spin">
+        <LoaderCircle className="w-[40px]" />
+      </div>
+    </div>
+  ) : (
     <section>
+      <Breadcrumb className="mb-4">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Add Product</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <Card>
         <CardHeader>
           <CardTitle>Add a Product</CardTitle>
