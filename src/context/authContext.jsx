@@ -9,6 +9,7 @@ const AuthProvider = ({ children }) => {
   const [sellerId, setSellerId] = useState(null);
   const [loadingState, setLoadingState] = useState(true);
   const token = useTokenStore((state) => state.token);
+  const [updateState, setUpdateState] = useState(false)
 
   useEffect(() => {
     const getIdByToken = async () => {
@@ -71,6 +72,8 @@ const AuthProvider = ({ children }) => {
         sellerInfo,
         loadingState,
         setLoadingState,
+        updateState,
+        setUpdateState,
       }}
     >
       {children}

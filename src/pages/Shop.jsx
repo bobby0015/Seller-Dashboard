@@ -23,9 +23,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import UpdateProductForm from "@/components/UpdateProductForm";
+import { ToastContainer } from "react-toastify";
 
 const Shop = () => {
   const { sellerInfo, loadingState } = useContext(authContext);
+  const {updateState} = useContext(authContext);
 
   // Reducer to manage products
   const reducer = (state, action) => {
@@ -56,7 +58,7 @@ const Shop = () => {
     };
 
     fetchProducts();
-  }, [sellerInfo]);
+  }, [sellerInfo,updateState]);
 
   return loadingState || !sellerInfo || !products ? (
     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -97,7 +99,7 @@ const Shop = () => {
             is listed below. Here you can manage your Products.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex flex-col-reverse">
           {/* Product List */}
           {products.map((product) => {
             if (!product) {
@@ -125,7 +127,7 @@ const Shop = () => {
                       Discount : {product.discount}% off
                     </p>
                   </div>
-                  <div className="mt-1">
+                  <div className="flex mt-1">
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <button className="text-sm text-blue-500 hover:underline cursor-pointer font-semibold">

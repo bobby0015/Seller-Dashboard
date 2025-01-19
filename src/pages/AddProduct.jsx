@@ -79,7 +79,7 @@ const subcategories = {
 };
 
 const AddProduct = () => {
-  const { sellerId, loadingState } = useContext(authContext);
+  const { sellerId, loadingState,setUpdateState,updateState } = useContext(authContext);
   const ProductNameRef = useRef(null);
   const ProductPriceRef = useRef(null);
   const ProductDescriptionRef = useRef(null);
@@ -124,6 +124,11 @@ const AddProduct = () => {
       setSelectedFile(null);
       setCategory(null);
       setSubCategory(null);
+      if(updateState){
+        setUpdateState(false);
+      }else{
+        setUpdateState(true);
+      }
     },
     onError: (error) => {
       const errorMessage =
