@@ -79,7 +79,8 @@ const subcategories = {
 };
 
 const AddProduct = () => {
-  const { sellerId, loadingState,setUpdateState,updateState } = useContext(authContext);
+  const { sellerId, loadingState, setUpdateState, updateState } =
+    useContext(authContext);
   const ProductNameRef = useRef(null);
   const ProductPriceRef = useRef(null);
   const ProductDescriptionRef = useRef(null);
@@ -91,9 +92,6 @@ const AddProduct = () => {
   const ProductStockRef = useRef(null);
   const [category, setCategory] = useState(null);
   const [subCategory, setSubCategory] = useState(null);
-
-  const formData = new FormData();
-  formData.append("file", selectedFile);
 
   const getSelectedCategory = (value) => {
     setCategory(value);
@@ -124,9 +122,9 @@ const AddProduct = () => {
       setSelectedFile(null);
       setCategory(null);
       setSubCategory(null);
-      if(updateState){
+      if (updateState) {
         setUpdateState(false);
-      }else{
+      } else {
         setUpdateState(true);
       }
     },
@@ -200,12 +198,26 @@ const AddProduct = () => {
       !selectedFile
     ) {
       handleError("Please fill out all the required fields");
+      console.log("Data: ", {
+        name,
+        price,
+        stock,
+        description,
+        brand,
+        warranty,
+        discount,
+        category,
+        subCategory,
+        selectedFile,
+      });
       return;
     }
     if (!sellerId) {
       handleError("Failed to add product");
       return;
     }
+    const formData = new FormData();
+    formData.append("file", selectedFile);
     mutation.mutate(formData);
   };
 
